@@ -101,14 +101,14 @@ int main (int ac, char *av[])
         printf ("%s %s\n", optinv, av[optind-1]);
       else
         printf ("%s (opt,ind,arg,idx): %d,%d,'%s',%d\n", optinv, optopt, optind, optarg, optidx);
-      getopt_usage (av[0], myapp_version, myapp_license, short_opts, long_opts, opts_maps, 1);
+      getopt_usage (av[0], myapp_version, myapp_license, short_opts, long_opts, opts_maps, 2);
       
     case _id_( help ): case 'h':
-      getopt_usage (av[0], myapp_version, myapp_license, short_opts, long_opts, opts_maps, 1);
+      getopt_usage (av[0], myapp_version, myapp_license, short_opts, long_opts, opts_maps, 0);
 
     default:
       printf ("%s ('%s','%s',%d):%c\n", apperr, __FILE__, __func__, __LINE__, opt);
-      getopt_usage (av[0], myapp_version, myapp_license, short_opts, long_opts, opts_maps, 0);
+      getopt_usage (av[0], myapp_version, myapp_license, short_opts, long_opts, opts_maps, 3);
     }
   }
   
