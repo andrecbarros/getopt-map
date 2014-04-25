@@ -82,7 +82,7 @@ extern "C" {
 #define _stringify_(x...)    _to_str_(x)
 #define _id_(x)              _om_##x
 #define _id2_(x,y)           _id_(x) = y
-#define _idm_(x)             _om_##x##_ = _id_(x)
+#define _idm_(x)             _id_(x##_) = _id_(x)
 
 enum option_map_id {
     _id2_( _zero, 0 ),
