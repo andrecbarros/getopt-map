@@ -18,7 +18,7 @@ are probably of seldom use.
 
 Compile with:
 
-gcc -DVERSION=1.1 -DLICENSE=MIT -o example -I. getopt-map-example.c
+gcc -DVERSION=1.1 -DLICENSE=MIT -o example -I. get-map.c getopt-map-example.c
 
 After that try, for example:
 
