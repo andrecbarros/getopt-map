@@ -1,4 +1,6 @@
 #include <getopt-map.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 enum option_id {
     _id_default_header_
