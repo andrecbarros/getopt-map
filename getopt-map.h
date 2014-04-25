@@ -66,11 +66,6 @@
  *     _opt_map_default_footer_
  * };
  *
- * // getopt-map.c will work like a very primitive "template" and place order is significant
- * // for the id-ification process.
- * //
- * #include <getopt-map.c>
- *
  */
 
 #ifndef _GETOPT_MAP_H
@@ -86,22 +81,43 @@ extern "C" {
 #define _to_str_(x...)       #x
 #define _stringify_(x...)    _to_str_(x)
 #define _id_(x)              _om_##x
+#define _id2_(x,y)           _id_(x) = y
+#define _idm_(x)             _om_##x##_ = _id_(x)
 
-#define _id_default_header_  _id_( _zero ) = 0,       \
-                             _id_( _lim_inf ) = 1000, // No overlap with regular chars (see getopt_long return values)
-#define _id_default_footer_  _id_( _lim_sup ),        \
-                             _id_( _app_header ),     \
-                             _id_( _app_footer ),     \
-                             _id_( _app_error ),      \
-                             _id_( _app_support ),    \
-                                                      \
-                             _id_( _opt_missing ),    \
-                             _id_( _opt_invalid ),    \
-                                                      \
-                             _id_( _arg_obligatory ), \
-                             _id_( _arg_optional ),   \
-                             _id_( _arg_missing ),    \
-                             _id_( _arg_invalid )     // application, option, argument to option
+enum option_map_id {
+    _id2_( _zero, 0 ),
+    _id2_( _lim_inf, 1000 ),    // No overlap with regular chars (see getopt_long return values)
+    _id2_( _lim_sup, 2098152 ), // Arbitrary but will work for all cases as it is a ceil on all 
+                                // systems I know and we are counting args and not bytes (ARG_MAX)
+    _id_( _app_header ),
+    _id_( _app_footer ),
+    _id_( _app_error ),
+    _id_( _app_support ),
+    
+    _id_( _opt_missing ),
+    _id_( _opt_invalid ),
+    
+    _id_( _arg_obligatory ),
+    _id_( _arg_optional ),
+    _id_( _arg_missing ),
+    _id_( _arg_invalid )
+};
+
+#define _id_default_header_  _idm_( _zero ),           \
+                             _idm_( _lim_inf ),
+#define _id_default_footer_  _idm_( _lim_sup ),        \
+                             _idm_( _app_header ),     \
+                             _idm_( _app_footer ),     \
+                             _idm_( _app_error ),      \
+                             _idm_( _app_support ),    \
+                                                       \
+                             _idm_( _opt_missing ),    \
+                             _idm_( _opt_invalid ),    \
+                                                       \
+                             _idm_( _arg_obligatory ), \
+                             _idm_( _arg_optional ),   \
+                             _idm_( _arg_missing ),    \
+                             _idm_( _arg_invalid )
 
 #ifndef no_argument
 #define no_argument 0
