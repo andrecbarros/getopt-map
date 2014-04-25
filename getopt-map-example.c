@@ -37,8 +37,6 @@ struct option_map opts_maps[] = {
     _opt_map_default_footer_
 };
 
-#include <getopt-map.c>
-
 #define myapp_version _stringify_(VERSION)
 #define myapp_license _stringify_(LICENSE)
 
