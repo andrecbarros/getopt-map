@@ -1,8 +1,8 @@
-/* getopt-map.c - v0.1 - 2014.04.22 12:31:30 GMT-3
+/* getopt-map.c - v0.1 - 2014.04.26 12:17:30 GMT-3
  * License: BSD-3 clauses,  MIT or GPL2+ (any of them for derivatives)
  * Andre C. Barros - <andre.cbarros@yahoo.com>
  *
- * Improve the useability of getopt_long by appliying
+ * Improve the useability of getopt_long by applying
  * the c pre-processor stringification, id-ification
  * and enum automatic serialization.
  * 
@@ -18,7 +18,10 @@ extern "C" {
 #endif
 
 struct option opt_zero = _opt_zero_;
+
+#if ! defined (GETOPT_AVOID_BLOAT)
 struct option_map opt_map_zero = _opt_map_zero_;
+#endif
 
 struct option *option_p (struct option *o, int id)
 {
@@ -32,6 +35,7 @@ struct option *option_p (struct option *o, int id)
       return NULL;
 }
 
+#if ! defined (GETOPT_AVOID_BLOAT)
 struct option_map *option_map_p (struct option_map *m, int id)
 {
   if (m == 0 || id == _id_( _zero ))
@@ -57,14 +61,28 @@ int getopt_map (struct option_map *m, int id)
 
 char *getopt_msg (struct option_map *m, int id)
 {
-  if (m == 0 || id == _id_( _zero ))
+  static struct option_map *offsm = 0;
+  
+  if (m == 0 || id == _id_( _zero )) {
+    offsm = 0;
     return NULL;
+  }
+  if (id > _id_( _lim_sup ) && id < _id_( _lim_messages )) {
+    if (offsm == 0) {
+      for ( ; m->id != _id_( _lim_sup ) ; m++)
+        if (m->id == _id_( _zero ) && m->ch == 0 && m->msg == 0)
+            return NULL;
+
+      offsm = m;
+    }
+    return offsm[id - _id_( _lim_sup )].msg;
+  }
     
-    for ( ; ; m++)
-      if (m->id == id)
-        return m->msg;
-    else if (m->id == _id_( _zero ) && m->ch == 0 && m->msg == 0)
-      return NULL;
+  for ( ; ; m++)
+    if (m->id == id)
+      return m->msg;
+  else if (m->id == _id_( _zero ) && m->ch == 0 && m->msg == 0)
+    return NULL;
 }
 
 void getopt_usage (char *app_name, char *app_version, char *app_license, 
@@ -73,7 +91,6 @@ void getopt_usage (char *app_name, char *app_version, char *app_license,
 {
   char *app, *msg, *chr, *argobl, *argopt;
   struct option *opt;
-  struct option_map *skip_opts;
   
   // Application information
   if (app_name) {
@@ -89,15 +106,13 @@ void getopt_usage (char *app_name, char *app_version, char *app_license,
   }
   
   if (opts_maps && (short_opts || long_opts)) {
-    skip_opts = option_map_p ( opts_maps, _id_( _lim_sup )) + 1;
-    
     // Usage header information
-    if ((msg = getopt_msg (skip_opts, _id_( _app_header ))) != NULL)
+    if ((msg = getopt_msg (opts_maps, _id_( _app_header ))) != NULL)
       printf (msg, app);
 
-    if ((argobl = getopt_msg (skip_opts, _id_( _arg_obligatory ))) == NULL)
+    if ((argobl = getopt_msg (opts_maps, _id_( _arg_obligatory ))) == NULL)
       argobl = "<...>";
-    if ((argopt = getopt_msg (skip_opts, _id_( _arg_optional ))) == NULL)
+    if ((argopt = getopt_msg (opts_maps, _id_( _arg_optional ))) == NULL)
       argopt = "[...]";
 
     // Print mapped options
@@ -137,11 +152,12 @@ void getopt_usage (char *app_name, char *app_version, char *app_license,
           printf("\n");
       }
     }
-    if ((msg = getopt_msg (skip_opts, _id_( _app_footer ))) != NULL)
+    if ((msg = getopt_msg (opts_maps, _id_( _app_footer ))) != NULL)
       printf (msg, app);
   }
   exit (exit_val);
 }
+#endif /* GETOPT_AVOID_BLOAT */
 
 #ifdef __cplusplus
 }
