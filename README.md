@@ -9,6 +9,11 @@ This is a very small project that tries to improve
 the useability of getopt_long by appliying the
 c pre-processor stringification, id-ification
 and enum automatic serialization.
+
+The main goal is to avoid the need to remember the
+complex mapping between short and long options or 
+the order they appear on application with a large 
+number of them.
  
 Take a look on getopt-map-example.c to see how it works.
 
