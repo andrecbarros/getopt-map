@@ -47,7 +47,7 @@ int main (int ac, char *av[])
   //app_maps = opts_maps; // initialize the messages (may read them through 'getopt_msg_read'
                           // or write to a files with 'getopt_msg_write')
                             
-  opterr = 0; // No default error message
+  // opterr = 0; // No default error message
   while ((opt = getopt_long(ac, av, short_opts, long_opts, &optidx)) != -1) {
     switch (opt) {
     case 'g':
