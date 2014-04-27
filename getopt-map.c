@@ -17,12 +17,6 @@
 extern "C" {
 #endif
 
-struct option opt_zero = _opt_zero_;
-
-#if ! defined (GETOPT_AVOID_BLOAT)
-struct option_map opt_map_zero = _opt_map_zero_;
-#endif
-
 struct option *option_p (struct option *o, int id)
 {
   if (o == 0 || id <= _id_( _lim_inf ) || id >= _id_( _lim_sup ))
@@ -35,7 +29,7 @@ struct option *option_p (struct option *o, int id)
       return NULL;
 }
 
-#if ! defined (GETOPT_AVOID_BLOAT)
+#ifdef GETOPT_MAP_EXTENSIONS
 struct option_map *option_map_p (struct option_map *m, int id)
 {
   if (m == 0 || id == _id_( _zero ))
@@ -157,7 +151,7 @@ void getopt_usage (char *app_name, char *app_version, char *app_license,
   }
   exit (exit_val);
 }
-#endif /* GETOPT_AVOID_BLOAT */
+#endif /* GETOPT_MAP_EXTENSIONS */
 
 #ifdef __cplusplus
 }
