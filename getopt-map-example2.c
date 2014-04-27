@@ -1,7 +1,5 @@
 /* getopt-map-example2.c
  */
- 
-#define GETOPT_AVOID_BLOAT
 
 #include <getopt-map.h>
 #include <stdlib.h>
@@ -32,7 +30,7 @@ struct option long_opts[] = {
     _opt_( flag, no),
     _opt_( help, 0),
     _opt_( simple_test, 0),                // Make both --simple_test and --simple-test
-    _opl_( simple_test, "simple-test", 0), // acceptable
+    _oph_( simple_test, "simple-test", 0), // acceptable
     
     _opt_default_footer_
 };
@@ -102,11 +100,11 @@ int main (int ac, char *av[])
       break;
     
     case 0: // there is no value stored on long_opts[optind].val, check *(long_opts[optind].flag)
-      printf ("%s --%s\n", "Not enumerated", long_opts[optind].name);
+      printf ("%s --%s\n", "Not enumerated", long_opts[optidx].name);
       break;
 
-    case 1:  // must iterate through all arguments and be finalized by '-'. Specialized case not automatically handled
-      printf ("%s --%s\n", "Should iterate", long_opts[optind].name);
+    case 1:  // iterate through all arguments. Specialized case not automatically handled
+      printf ("%s %s\n", "Should iterate", optarg);
       break;
       
     default:
